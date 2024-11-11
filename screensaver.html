@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bouncing Image Screensaver</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #000;
+    }
+    #bouncingImage {
+      position: absolute;
+    }
+    .color-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      mix-blend-mode: color;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <img id="bouncingImage" src="" alt="Bouncing Image" />
+  <div class="color-overlay" id="colorOverlay"></div>
+
+  <script>
+    const img = document.getElementById('bouncingImage');
+    const colorOverlay = document.getElementById('colorOverlay');
+    const uploadedImage = localStorage.getItem('uploadedImage');
+    const isDefaultImage = !uploadedImage || uploadedImage === 'default.png';
+
+    // Set the image source
+    img.src = isDefaultImage ? 'default.png' : uploadedImage;
+
+    // Apply a random color if using the default image
+    if (isDefaultImage) {
+      const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+      colorOverlay.style.backgroundColor = randomColor;
+    }
+
+    let posX = 100;
+    let posY = 100;
+    let velX = 2;
+    let velY = 2;
+
+    function updatePosition() {
+      posX += velX;
+      posY += velY;
+
+      if (posX + img.width >= window.innerWidth || posX <= 0) {
+        velX = -velX;
+      }
+      if (posY + img.height >= window.innerHeight || posY <= 0) {
+        velY = -velY;
+      }
+
+      img.style.left = posX + 'px';
+      img.style.top = posY + 'px';
+
+      requestAnimationFrame(updatePosition);
+    }
+
+    img.onload = function() {
+      updatePosition();
+    };
+  </script>
+</body>
+</html>
