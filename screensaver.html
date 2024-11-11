@@ -12,6 +12,7 @@
     }
     #bouncingImage {
       position: absolute;
+      transition: none; /* Disable smooth transitions */
     }
     .color-overlay {
       position: absolute;
@@ -48,6 +49,23 @@
     let velX = 2;
     let velY = 2;
 
+    function updateImageSize() {
+      // Calculate 10% of the screen width
+      const scale = 0.1;
+      const width = window.innerWidth * scale;
+      const height = window.innerHeight * scale;
+
+      // Maintain aspect ratio
+      const aspectRatio = img.naturalWidth / img.naturalHeight;
+      if (width / height > aspectRatio) {
+        img.style.width = `${height * aspectRatio}px`;
+        img.style.height = `${height}px`;
+      } else {
+        img.style.width = `${width}px`;
+        img.style.height = `${width / aspectRatio}px`;
+      }
+    }
+
     function updatePosition() {
       posX += velX;
       posY += velY;
@@ -65,9 +83,14 @@
       requestAnimationFrame(updatePosition);
     }
 
+    // Wait for the image to load and then start the animation
     img.onload = function() {
+      updateImageSize(); // Set initial size based on screen size
       updatePosition();
     };
+
+    // Resize the image when the window is resized
+    window.onresize = updateImageSize;
   </script>
 </body>
 </html>
