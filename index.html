@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Image Bouncing Screensaver</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    #upload-section {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="upload-section">
+    <h1>Upload an Image</h1>
+    <input type="file" id="imageInput" accept="image/*">
+    <button id="startButton">Start Screensaver</button>
+  </div>
+
+  <script>
+    document.getElementById('startButton').addEventListener('click', function() {
+      const file = document.getElementById('imageInput').files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          localStorage.setItem('uploadedImage', e.target.result);
+          window.location.href = "screensaver.html";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // No file selected, use a default image
+        localStorage.setItem('uploadedImage', 'default.png'); // Ensure `default.png` is in the same folder
+        window.location.href = "screensaver.html";
+      }
+    });
+  </script>
+</body>
+</html>
